@@ -24,16 +24,16 @@ public class HangmanPlayer {
                 .filter(word-> word.length()== hangmanLength)
                 .collect(Collectors.toList());
         int numberOfGuess = 0;
-        while (response.getGameEnded()) {
+        boolean isPlaying=!response.getGameEnded();
+        while (isPlaying) {
             String token = response.getToken();
             String hangman = response.getHangman();
             String guess = makeAGuess(dictionary, hangman);
             response = server.guess(token, guess);
             numberOfGuess++;
-            if (response.getGameEnded()) {
-                break;//no need to reconstruct the dict if game is over
-            }
-            if(guess.length()==1) //need to reconstruct only if string is Char
+            isPlaying=!response.getGameEnded();
+            //need to reconstruct only if string is Char and we are still playing
+            if(guess.length()==1 && isPlaying)
                 dictionary = reconstructDictionary(dictionary, response.isCorrect(), guess);
         }
         System.out.println("Game ended...");
