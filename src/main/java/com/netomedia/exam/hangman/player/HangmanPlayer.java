@@ -82,10 +82,9 @@ public class HangmanPlayer {
     }
 
     private static void countLettersInDictionary(List<String> dictionary, Map<Character, Integer> letterToCount) {
-        for (String word : dictionary) {
-            for (int i = 0; i < word.length(); i++) {
-                char alphabet = word.charAt(i);
-                int currentCount = letterToCount.get(alphabet);
+        for (String word : dictionary) { //O(n)
+            for(char alphabet = 'a'; alphabet <='z'; alphabet++ ){ //O(1)
+                int currentCount= letterToCount.get(alphabet);
                 int newCount = CharMatcher.is(alphabet).countIn(word);
                 letterToCount.put(alphabet, currentCount + newCount);
             }
