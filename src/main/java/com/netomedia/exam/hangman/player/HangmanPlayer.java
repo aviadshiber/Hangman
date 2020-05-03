@@ -17,11 +17,11 @@ public class HangmanPlayer {
         System.out.println("Starting game...");
         ServerResponse response = server.startNewGame();
         System.out.println("Game started successfully");
-        ServerResponse finalResponse = response;
+        final int hangmanLength=response.getHangman().length();
         //load dictionary to memory and remove words that does not match the length of hangman
         List<String> dictionary = loadDictionary()
                 .stream()
-                .filter(word-> word.length()== finalResponse.getHangman().length())
+                .filter(word-> word.length()== hangmanLength)
                 .collect(Collectors.toList());
         int numberOfGuess = 0;
         while (response.getGameEnded()) {
@@ -33,7 +33,8 @@ public class HangmanPlayer {
             if (response.getGameEnded()) {
                 break;//no need to reconstruct the dict if game is over
             }
-            dictionary = reconstructDictionary(dictionary, response.isCorrect(), guess);
+            if(guess.length()==1) //need to reconstruct only if string is Char
+                dictionary = reconstructDictionary(dictionary, response.isCorrect(), guess);
         }
         System.out.println("Game ended...");
         if (response.isCorrect()) {
